@@ -1,0 +1,83 @@
+.create-project-box {
+  background: rgba(26, 29, 41, 0.5);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 25px;
+  margin-bottom: 25px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+}
+
+.create-project-box h3 {
+  color: #fff;
+  margin-top: 0;
+  margin-bottom: 15px;
+}
+
+.create-project-box label {
+  display: block;
+  color: #9ca3af;
+  font-size: 0.85rem;
+  margin-bottom: 6px;
+}
+
+.create-project-box input,
+.create-project-box textarea {
+  width: 100%;
+  padding: 10px 14px;
+  margin-bottom: 15px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border-radius: 10px;
+  color: #fff;
+  font-family: inherit;
+}
+
+.create-project-box textarea {
+  resize: vertical;
+  min-height: 70px;
+}
+
+.create-project-box input:focus,
+.create-project-box textarea:focus {
+  outline: none;
+  border-color: #a855f7;
+  box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.15);
+}
+
+.create-project-box button {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  color: white;
+  cursor: pointer;
+  background: linear-gradient(90deg, #6366f1, #a855f7);
+  transition: box-shadow 0.2s ease, transform 0.15s ease;
+}
+
+.create-project-box button:hover {
+  box-shadow: 0 0 20px rgba(168, 85, 247, 0.5);
+  transform: translateY(-1px);
+}
+
+.toggle-form-btn {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  color: white;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  margin-bottom: 20px;
+  transition: background 0.2s ease, transform 0.15s ease;
+}
+
+.toggle-form-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-1px);
+}

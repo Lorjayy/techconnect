@@ -1,0 +1,5 @@
+node_modules
+.env
+/Screenshot*.png
+/backend/cd
+/backend/npm

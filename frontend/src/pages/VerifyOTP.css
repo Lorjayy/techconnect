@@ -1,0 +1,114 @@
+.otp-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.otp-page::before,
+.otp-page::after {
+  content: '';
+  position: absolute;
+  width: 500px;
+  height: 500px;
+  border-radius: 50%;
+  filter: blur(120px);
+  opacity: 0.35;
+  z-index: 0;
+}
+
+.otp-page::before {
+  background: #6366f1;
+  top: -100px;
+  left: -100px;
+}
+
+.otp-page::after {
+  background: #a855f7;
+  bottom: -150px;
+  right: -100px;
+}
+
+.otp-box {
+  background: rgba(26, 29, 41, 0.5);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  padding: 40px;
+  max-width: 400px;
+  width: 90%;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+
+.otp-box h2 {
+  color: #fff;
+  margin-bottom: 10px;
+}
+
+.otp-box p {
+  color: #9ca3af;
+  margin-bottom: 25px;
+  font-size: 0.9rem;
+}
+
+.otp-box input {
+  width: 100%;
+  padding: 14px;
+  font-size: 1.3rem;
+  text-align: center;
+  letter-spacing: 8px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border-radius: 10px;
+  color: #fff;
+  margin-bottom: 20px;
+}
+
+.otp-box input:focus {
+  outline: none;
+  border-color: #a855f7;
+  box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.15);
+}
+
+.otp-box button {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  color: white;
+  cursor: pointer;
+  background: linear-gradient(90deg, #6366f1, #a855f7);
+  margin-bottom: 12px;
+  transition: box-shadow 0.2s ease, transform 0.15s ease;
+}
+
+.otp-box button:hover {
+  box-shadow: 0 0 20px rgba(168, 85, 247, 0.5);
+  transform: translateY(-1px);
+}
+
+.resend-btn {
+  background: none !important;
+  color: #c084fc !important;
+  font-weight: 500 !important;
+  text-decoration: underline;
+  box-shadow: none !important;
+}
+
+.success-msg {
+  color: #6ee7b7;
+  background: rgba(52, 211, 153, 0.1);
+  border: 1px solid rgba(52, 211, 153, 0.2);
+  padding: 10px;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  font-size: 0.9rem;
+}

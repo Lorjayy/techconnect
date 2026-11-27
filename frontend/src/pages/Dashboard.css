@@ -1,0 +1,120 @@
+.dashboard-page {
+  min-height: 100vh;
+  position: relative;
+  overflow: hidden;
+  padding: 40px 20px;
+}
+
+.dashboard-page::before,
+.dashboard-page::after {
+  content: '';
+  position: fixed;
+  width: 500px;
+  height: 500px;
+  border-radius: 50%;
+  filter: blur(120px);
+  opacity: 0.3;
+  z-index: 0;
+}
+
+.dashboard-page::before {
+  background: #6366f1;
+  top: -150px;
+  left: -150px;
+}
+
+.dashboard-page::after {
+  background: #a855f7;
+  bottom: -200px;
+  right: -150px;
+}
+
+.dashboard-container {
+  max-width: 800px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.dashboard-header h2 {
+  margin: 0;
+  color: #fff;
+}
+
+.dashboard-container h3 {
+  color: #9ca3af;
+  font-weight: 500;
+  margin-top: 25px;
+}
+
+.logout-btn {
+  padding: 10px 20px;
+  background: linear-gradient(90deg, #ef4444, #dc2626);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: box-shadow 0.2s ease, transform 0.15s ease;
+}
+
+.logout-btn:hover {
+  box-shadow: 0 0 16px rgba(239, 68, 68, 0.5);
+  transform: translateY(-1px);
+}
+
+.toggle-form-btn {
+  padding: 10px 20px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  color: white;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: background 0.2s ease, transform 0.15s ease;
+}
+
+.toggle-form-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-1px);
+}
+
+.project-card {
+  background: rgba(26, 29, 41, 0.5);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 22px;
+  margin: 15px 0;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.project-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+}
+
+.project-card h4 {
+  margin-top: 0;
+  color: #c084fc;
+  font-size: 1.2rem;
+}
+
+.project-card p {
+  margin: 8px 0;
+  color: #d1d5db;
+}
+
+.project-card strong {
+  color: #f3f4f6;
+}
