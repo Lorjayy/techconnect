@@ -127,3 +127,8 @@
   background: rgba(34, 197, 94, 0.15);
   color: #86efac;
 }
+@media (max-width: 640px) {
+  .pf-card {
+    padding: 18px;
+  }
+}

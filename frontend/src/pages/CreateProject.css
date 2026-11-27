@@ -81,3 +81,8 @@
   background: rgba(255, 255, 255, 0.1);
   transform: translateY(-1px);
 }
+@media (max-width: 640px) {
+  .create-project-box {
+    padding: 18px;
+  }
+}

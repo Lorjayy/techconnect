@@ -115,22 +115,22 @@ function Dashboard() {
       <div className="dashboard-container">
         <div className="dashboard-header">
   <h2>Welcome to TechConnect</h2>
-  <div>
-    <button className="toggle-form-btn" onClick={() => navigate('/profile')} style={{ marginRight: '10px' }}>
+  <div className="dashboard-nav">
+    <button className="toggle-form-btn" onClick={() => navigate('/profile')}>
       My Profile
     </button>
     {isAdmin && (
-      <button className="toggle-form-btn" onClick={() => navigate('/admin')} style={{ marginRight: '10px' }}>
+      <button className="toggle-form-btn" onClick={() => navigate('/admin')}>
         Admin Panel
       </button>
     )}
-    <button className="toggle-form-btn" onClick={() => navigate('/inbox')} style={{ marginRight: '10px' }}>
+    <button className="toggle-form-btn" onClick={() => navigate('/inbox')}>
       Inbox
     </button>
-    <button className="toggle-form-btn" onClick={() => navigate('/mentors')} style={{ marginRight: '10px' }}>
+    <button className="toggle-form-btn" onClick={() => navigate('/mentors')}>
       Find a Mentor
     </button>
-    <button className="toggle-form-btn" onClick={() => navigate(`/portfolio/${localStorage.getItem('userId')}`)} style={{ marginRight: '10px' }}>
+    <button className="toggle-form-btn" onClick={() => navigate(`/portfolio/${localStorage.getItem('userId')}`)}>
       My Portfolio
     </button>
     <button className="logout-btn" onClick={handleLogout}>Logout</button>

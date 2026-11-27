@@ -138,3 +138,8 @@
   margin-bottom: 15px;
   font-size: 0.9rem;
 }
+@media (max-width: 640px) {
+  .profile-box {
+    padding: 18px;
+  }
+}

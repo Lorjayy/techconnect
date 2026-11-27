@@ -162,3 +162,22 @@
 .small-btn.danger:hover {
   background: rgba(248, 113, 113, 0.15);
 }
+
+@media (max-width: 640px) {
+  .panel-tabs {
+    flex-wrap: wrap;
+  }
+
+  .panel-card {
+    padding: 14px 16px;
+  }
+
+  /* Name and details get the full width; buttons and dates drop below */
+  .panel-card-info {
+    flex-basis: 100%;
+  }
+
+  .panel-actions {
+    flex-wrap: wrap;
+  }
+}

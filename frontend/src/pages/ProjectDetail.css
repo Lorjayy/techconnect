@@ -240,3 +240,32 @@
   background: rgba(255, 255, 255, 0.06);
   border: 1px solid rgba(255, 255, 255, 0.1);
 }
+
+@media (max-width: 640px) {
+  .info-box {
+    padding: 18px;
+  }
+
+  /* Task title on top, its buttons on a row below */
+  .task-item {
+    flex-wrap: wrap;
+    padding: 12px 14px;
+  }
+
+  .task-item .task-title {
+    flex: 1 1 100%;
+    overflow-wrap: anywhere;
+  }
+
+  .task-actions {
+    flex-wrap: wrap;
+  }
+
+  .task-edit-form {
+    flex: 1 1 100%;
+  }
+
+  .add-task-form input {
+    min-width: 0;
+  }
+}

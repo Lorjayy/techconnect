@@ -38,14 +38,17 @@
 
 .dashboard-header {
   display: flex;
+  flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 10px;
+  gap: 16px;
+  margin-bottom: 20px;
 }
 
 .dashboard-header h2 {
   margin: 0;
   color: #fff;
+  white-space: nowrap;
 }
 
 .dashboard-container h3 {
@@ -117,4 +120,38 @@
 
 .project-card strong {
   color: #f3f4f6;
+}
+.dashboard-nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.dashboard-nav .toggle-form-btn {
+  margin-bottom: 0;
+}
+
+@media (max-width: 640px) {
+  .dashboard-header {
+    flex-direction: column;
+    align-items: stretch;
+    margin-bottom: 20px;
+  }
+
+  /* Two buttons per row instead of one long row off the screen */
+  .dashboard-nav {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .dashboard-nav button {
+    padding: 10px 8px;
+    font-size: 0.9rem;
+  }
+
+  .project-card {
+    padding: 16px;
+  }
 }

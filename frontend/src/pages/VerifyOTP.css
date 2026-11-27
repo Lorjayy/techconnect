@@ -112,3 +112,12 @@
   margin-bottom: 15px;
   font-size: 0.9rem;
 }
+@media (max-width: 640px) {
+  .otp-box {
+    padding: 28px 20px;
+  }
+
+  .otp-box input {
+    letter-spacing: 5px;
+  }
+}

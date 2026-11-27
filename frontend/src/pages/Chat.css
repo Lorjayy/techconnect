@@ -176,3 +176,37 @@
 .chat-attach-btn:hover {
   background: rgba(255, 255, 255, 0.12);
 }
+
+@media (max-width: 640px) {
+  .chat-page {
+    padding-bottom: 12px;
+  }
+
+  /* Fill the visible screen (dvh accounts for the phone's address bar) */
+  .chat-container {
+    height: calc(100vh - 32px);
+    height: calc(100dvh - 32px);
+  }
+
+  .chat-messages {
+    padding: 14px;
+  }
+
+  .chat-bubble {
+    max-width: 85%;
+  }
+
+  .chat-input-row {
+    gap: 6px;
+    margin-top: 10px;
+  }
+
+  .chat-input-row input {
+    min-width: 0;
+  }
+
+  .chat-attach-btn,
+  .chat-input-row button {
+    padding: 12px;
+  }
+}

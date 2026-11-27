@@ -140,3 +140,12 @@
 .message-btn:hover {
   background: rgba(255, 255, 255, 0.14);
 }
+@media (max-width: 640px) {
+  .search-row input {
+    min-width: 0;
+  }
+
+  .mentor-card {
+    padding: 16px;
+  }
+}

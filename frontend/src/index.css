@@ -129,4 +129,55 @@ button:disabled {
 
 .glow-btn:active {
   transform: translateY(0);
-}
+}
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+/* Stop wide glow blobs from causing sideways scrolling on phones */
+body {
+  overflow-x: hidden;
+}
+
+@media (max-width: 640px) {
+  /* Fixed backgrounds stutter on mobile browsers */
+  body {
+    background-attachment: scroll;
+  }
+
+  h2 {
+    font-size: 1.3rem;
+  }
+
+  /* Bring every page's padding in from the screen edges */
+  .dashboard-page,
+  .panel-page,
+  .chat-page,
+  .mentors-page,
+  .portfolio-page,
+  .profile-page,
+  .detail-page {
+    padding: 20px 14px;
+  }
+
+  /* Page headers: title on its own line, buttons wrap underneath */
+  .dashboard-header,
+  .panel-header,
+  .chat-header,
+  .mentors-header,
+  .profile-header,
+  .detail-header {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .panel-header h2,
+  .chat-header h2,
+  .mentors-header h2,
+  .profile-header h2,
+  .detail-header h2 {
+    flex: 1;
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+}
