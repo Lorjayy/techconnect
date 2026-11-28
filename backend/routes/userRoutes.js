@@ -38,20 +38,28 @@ router.post('/', async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
     const otp = generateOTP();
     const otpExpires = new Date(Date.now() + 10 * 60 * 1000);
+    const details = { name, password: hashedPassword, skills, bio, otp, otpExpires };
 
-    const user = new User({
-      name,
-      email,
-      password: hashedPassword,
-      skills,
-      bio,
-      isVerified: false,
-      otp,
-      otpExpires,
-    });
+    // An unverified account can be signed up again (e.g. the first code never arrived),
+    // which replaces its details. Verified accounts still get the duplicate-email error.
+    let user = typeof email === 'string' ? await User.findOne({ email, isVerified: false }) : null;
+    const isNew = !user;
+    if (user) {
+      user.set(details);
+    } else {
+      user = new User({ email, isVerified: false, ...details });
+    }
 
     await user.save();
-    await sendOTPEmail(email, otp);
+
+    try {
+      await sendOTPEmail(email, otp);
+    } catch (emailErr) {
+      console.error('Failed to send verification email:', emailErr.message);
+      // Don't leave behind an account that can never receive its code
+      if (isNew) await user.deleteOne();
+      return res.status(502).json({ error: 'We could not send the verification email. Please try again in a moment.' });
+    }
 
     res.status(201).json({
       message: 'Signup successful. Please check your email for a verification code.',
@@ -132,7 +140,12 @@ router.post('/resend-otp', async (req, res) => {
     user.otpExpires = new Date(Date.now() + 10 * 60 * 1000);
     await user.save();
 
-    await sendOTPEmail(email, otp);
+    try {
+      await sendOTPEmail(email, otp);
+    } catch (emailErr) {
+      console.error('Failed to send verification email:', emailErr.message);
+      return res.status(502).json({ error: 'We could not send the verification email. Please try again in a moment.' });
+    }
 
     res.json({ message: 'A new verification code has been sent to your email.' });
   } catch (err) {
