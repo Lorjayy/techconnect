@@ -9,7 +9,7 @@ const validateId = require('../middleware/validateId');
 const upload = require('../middleware/upload');
 const { isAdmin } = require('../middleware/admin');
 const { saveFile, removeFiles, openDownload } = require('../utils/fileStore');
-const { emitMessage } = require('../utils/notify');
+const { emitMessage, emitGroupMessage } = require('../utils/notify');
 
 router.param('id', validateId);
 router.param('projectId', validateId);
@@ -94,6 +94,44 @@ router.post('/message/:userId', authenticate, upload, async (req, res) => {
     await message.save();
     await message.populate('attachment', 'filename contentType size');
     emitMessage(req, message);
+    res.status(201).json(message);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Send a file in a project's group chat, with an optional caption (protected - team only).
+// It is stored as a project file, so it also appears in the project's shared files.
+router.post('/project/:projectId/chat', authenticate, upload, async (req, res) => {
+  try {
+    const project = await Project.findById(req.params.projectId);
+    if (!project) {
+      return res.status(404).json({ error: 'Project not found' });
+    }
+
+    if (!project.isTeamMember(req.userId)) {
+      return res.status(403).json({ error: 'Only project members can post in the group chat' });
+    }
+
+    if (!req.file) {
+      return res.status(400).json({ error: 'No file provided' });
+    }
+
+    const file = await saveFile(req.file, { uploadedBy: req.userId, project: project._id });
+
+    const message = new Message({
+      sender: req.userId,
+      project: project._id,
+      content: req.body.content,
+      attachment: file._id,
+    });
+
+    await message.save();
+    await message.populate([
+      { path: 'sender', select: 'name' },
+      { path: 'attachment', select: 'filename contentType size' },
+    ]);
+    emitGroupMessage(req, project, message);
     res.status(201).json(message);
   } catch (err) {
     res.status(500).json({ error: err.message });

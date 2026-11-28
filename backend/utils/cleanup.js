@@ -2,11 +2,14 @@ const File = require('../models/file');
 const Message = require('../models/message');
 const Project = require('../models/project');
 const Task = require('../models/task');
+const CollabRequest = require('../models/collabRequest');
 const { removeFiles } = require('./fileStore');
 
 // Remove what belongs to a project. The caller deletes the project itself.
 const deleteProjectData = async (projectId) => {
   await Task.deleteMany({ project: projectId });
+  await Message.deleteMany({ project: projectId });
+  await CollabRequest.deleteMany({ project: projectId });
   await removeFiles(await File.find({ project: projectId }));
 };
 
@@ -23,6 +26,7 @@ const deleteUserData = async (userId) => {
   await Task.updateMany({ assignedTo: userId }, { assignedTo: null });
 
   await Message.deleteMany({ $or: [{ sender: userId }, { receiver: userId }] });
+  await CollabRequest.deleteMany({ $or: [{ from: userId }, { to: userId }] });
   await removeFiles(await File.find({
     project: null,
     $or: [{ uploadedBy: userId }, { sharedWith: userId }],

@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { disconnectSocket } from '../socket';
+import { disconnectSocket, getSocket } from '../socket';
+import '../components/components.css';
 import './Dashboard.css';
 import './CreateProject.css';
 
@@ -11,6 +12,7 @@ function Dashboard() {
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [pendingRequests, setPendingRequests] = useState(0);
   const [refresh, setRefresh] = useState(0);
 
   const [title, setTitle] = useState('');
@@ -53,6 +55,29 @@ function Dashboard() {
     fetchProjects();
     fetchRole();
   }, [token, navigate, refresh]);
+
+  // Number on the Requests button, kept up to date live
+  useEffect(() => {
+    if (!token) return undefined;
+    const fetchRequests = async () => {
+      try {
+        const res = await axios.get('/api/collabs', {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setPendingRequests(res.data.incoming.length);
+      } catch {
+        setPendingRequests(0);
+      }
+    };
+    fetchRequests();
+    const socket = getSocket();
+    socket?.on('collab:new', fetchRequests);
+    socket?.on('collab:update', fetchRequests);
+    return () => {
+      socket?.off('collab:new', fetchRequests);
+      socket?.off('collab:update', fetchRequests);
+    };
+  }, [token]);
 
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -116,7 +141,17 @@ function Dashboard() {
         <div className="dashboard-header">
   <h2>Welcome to TechConnect</h2>
   <div className="dashboard-nav">
-    <button className="toggle-form-btn" onClick={() => navigate('/profile')}>
+    <button className="toggle-form-btn" onClick={() => navigate('/messages')}>
+      Messages
+    </button>
+    <button className="toggle-form-btn" onClick={() => navigate('/people')}>
+      Find People
+    </button>
+    <button className="toggle-form-btn" onClick={() => navigate('/requests')}>
+      Requests
+      {pendingRequests > 0 && <span className="count-badge">{pendingRequests}</span>}
+    </button>
+    <button className="toggle-form-btn" onClick={() => navigate(`/portfolio/${localStorage.getItem('userId')}`)}>
       My Profile
     </button>
     {isAdmin && (
@@ -124,15 +159,6 @@ function Dashboard() {
         Admin Panel
       </button>
     )}
-    <button className="toggle-form-btn" onClick={() => navigate('/inbox')}>
-      Inbox
-    </button>
-    <button className="toggle-form-btn" onClick={() => navigate('/mentors')}>
-      Find a Mentor
-    </button>
-    <button className="toggle-form-btn" onClick={() => navigate(`/portfolio/${localStorage.getItem('userId')}`)}>
-      My Portfolio
-    </button>
     <button className="logout-btn" onClick={handleLogout}>Logout</button>
   </div>
 </div>
@@ -216,4 +242,4 @@ function Dashboard() {
   );
 }
 
-export default Dashboard;
+export default Dashboard;

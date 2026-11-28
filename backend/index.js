@@ -12,6 +12,7 @@ const taskRoutes = require('./routes/taskRoutes');
 const messageRoutes = require('./routes/messageRoutes');
 const fileRoutes = require('./routes/fileRoutes');
 const adminRoutes = require('./routes/adminRoutes');
+const collabRoutes = require('./routes/collabRoutes');
 
 const app = express();
 
@@ -28,6 +29,7 @@ app.use('/api/tasks', taskRoutes);
 app.use('/api/messages', messageRoutes);
 app.use('/api/files', fileRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/collabs', collabRoutes);
 
 // Real-time chat: one Socket.IO server sharing the HTTP server
 const server = http.createServer(app);
@@ -46,8 +48,32 @@ io.use((socket, next) => {
   }
 });
 
+// Who is online: user id -> number of open connections (tabs, devices)
+const onlineCounts = new Map();
+
 io.on('connection', (socket) => {
-  socket.join(socket.userId);
+  const { userId } = socket;
+  socket.join(userId);
+
+  const count = (onlineCounts.get(userId) || 0) + 1;
+  onlineCounts.set(userId, count);
+  if (count === 1) io.emit('presence', { userId, online: true });
+
+  // The client asks which of the given users are online
+  socket.on('presence:list', (ids, reply) => {
+    if (!Array.isArray(ids) || typeof reply !== 'function') return;
+    reply(ids.filter((id) => onlineCounts.has(String(id))));
+  });
+
+  socket.on('disconnect', () => {
+    const left = (onlineCounts.get(userId) || 1) - 1;
+    if (left > 0) {
+      onlineCounts.set(userId, left);
+    } else {
+      onlineCounts.delete(userId);
+      io.emit('presence', { userId, online: false });
+    }
+  });
 });
 
 // Routes use this to push a saved message to both people in the conversation

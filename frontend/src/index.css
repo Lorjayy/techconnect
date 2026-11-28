@@ -152,8 +152,7 @@ body {
   /* Bring every page's padding in from the screen edges */
   .dashboard-page,
   .panel-page,
-  .chat-page,
-  .mentors-page,
+  .people-page,
   .portfolio-page,
   .profile-page,
   .detail-page {
@@ -163,8 +162,6 @@ body {
   /* Page headers: title on its own line, buttons wrap underneath */
   .dashboard-header,
   .panel-header,
-  .chat-header,
-  .mentors-header,
   .profile-header,
   .detail-header {
     flex-wrap: wrap;
@@ -172,12 +169,21 @@ body {
   }
 
   .panel-header h2,
-  .chat-header h2,
-  .mentors-header h2,
   .profile-header h2,
   .detail-header h2 {
     flex: 1;
     min-width: 0;
     overflow-wrap: anywhere;
   }
+}
+
+/* Shared green confirmation message */
+.success-msg {
+  color: #6ee7b7;
+  background: rgba(52, 211, 153, 0.1);
+  border: 1px solid rgba(52, 211, 153, 0.2);
+  padding: 10px;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  font-size: 0.9rem;
 }

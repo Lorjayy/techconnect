@@ -11,7 +11,25 @@ const validateId = require('../middleware/validateId');
 router.param('id', validateId);
 
 // Fields of a user that anyone can see
-const PUBLIC_FIELDS = 'name bio skills skillsOffered skillsWanted createdAt';
+const PUBLIC_FIELDS = 'name bio skills skillsOffered skillsWanted headline location github linkedin website openToCollab createdAt';
+
+// Tidy a list of skills: text only, trimmed, no duplicates (ignoring case), at most 25
+const cleanSkills = (list) => {
+  if (!Array.isArray(list)) return undefined;
+  const seen = new Set();
+  return list
+    .filter((s) => typeof s === 'string')
+    .map((s) => s.trim().slice(0, 40))
+    .filter((s) => {
+      const key = s.toLowerCase();
+      if (!s || seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    })
+    .slice(0, 25);
+};
+
+const cleanText = (value) => (typeof value === 'string' ? value.trim() : undefined);
 
 const escapeRegex = (text) => text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 
@@ -198,6 +216,33 @@ router.get('/', authenticate, async (req, res) => {
   }
 });
 
+// Find people by name or skill (protected). ?q=text&mentors=1 limits to people who offer mentoring
+router.get('/search', authenticate, async (req, res) => {
+  try {
+    const q = typeof req.query.q === 'string' ? req.query.q.trim().slice(0, 50) : '';
+    const filter = { isVerified: true, _id: { $ne: req.userId } };
+
+    if (q) {
+      const pattern = new RegExp(escapeRegex(q), 'i');
+      filter.$or = [
+        { name: pattern },
+        { headline: pattern },
+        { skills: pattern },
+        { skillsOffered: pattern },
+      ];
+    }
+
+    if (req.query.mentors === '1') {
+      filter.skillsOffered = { $exists: true, $ne: [] };
+    }
+
+    const users = await User.find(filter).select(PUBLIC_FIELDS).sort({ createdAt: -1 }).limit(60);
+    res.json(users);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // Browse users offering a specific skill (public)
 router.get('/mentors/:skill', async (req, res) => {
   try {
@@ -239,11 +284,30 @@ router.get('/me', authenticate, async (req, res) => {
 // Update my own profile (protected)
 router.put('/me', authenticate, async (req, res) => {
   try {
-    const { name, skills, skillsOffered, skillsWanted, bio } = req.body;
+    const body = req.body || {};
+    const update = {
+      name: cleanText(body.name),
+      bio: cleanText(body.bio),
+      headline: cleanText(body.headline),
+      location: cleanText(body.location),
+      github: cleanText(body.github),
+      linkedin: cleanText(body.linkedin),
+      website: cleanText(body.website),
+      skills: cleanSkills(body.skills),
+      skillsOffered: cleanSkills(body.skillsOffered),
+      skillsWanted: cleanSkills(body.skillsWanted),
+      openToCollab: typeof body.openToCollab === 'boolean' ? body.openToCollab : undefined,
+    };
+    // Leave out anything that wasn't sent, so it isn't wiped
+    Object.keys(update).forEach((key) => update[key] === undefined && delete update[key]);
+
+    if (update.name !== undefined && update.name.length < 2) {
+      return res.status(400).json({ error: 'Name must be at least 2 characters' });
+    }
 
     const user = await User.findByIdAndUpdate(
       req.userId,
-      { name, skills, skillsOffered, skillsWanted, bio },
+      update,
       { new: true, runValidators: true }
     ).select('-password -otp -otpExpires');
 
@@ -257,9 +321,7 @@ router.put('/me', authenticate, async (req, res) => {
 // Public portfolio for a user (no email or password exposed)
 router.get('/:id/portfolio', async (req, res) => {
   try {
-    const user = await User.findById(req.params.id).select(
-      'name bio skills skillsOffered createdAt'
-    );
+    const user = await User.findById(req.params.id).select(PUBLIC_FIELDS);
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }

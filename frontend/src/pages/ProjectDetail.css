@@ -269,3 +269,8 @@
     min-width: 0;
   }
 }
+
+.small-btn.group-chat-btn {
+  border-color: transparent;
+  background: linear-gradient(90deg, #6366f1, #a855f7);
+}

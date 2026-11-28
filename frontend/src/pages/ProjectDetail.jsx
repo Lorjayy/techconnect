@@ -301,7 +301,7 @@ function ProjectDetail() {
                     ) : (
                       <span
                         style={{ cursor: 'pointer', color: '#a855f7' }}
-                        onClick={() => navigate(`/chat/${m._id}`)}
+                        onClick={() => navigate(`/messages/dm/${m._id}`)}
                       >
                         {m.name}
                       </span>
@@ -314,8 +314,13 @@ function ProjectDetail() {
               )}
             </p>
 
-            {(canManageProject || isMember) && (
+            {(canManageProject || isTeam) && (
               <div className="project-actions">
+                {(isTeam || isAdmin) && (
+                  <button className="small-btn group-chat-btn" onClick={() => navigate(`/messages/project/${project._id}`)}>
+                    # Open group chat
+                  </button>
+                )}
                 {canManageProject && (
                   <>
                     <button className="small-btn" onClick={startEditingProject}>Edit Project</button>

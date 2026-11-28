@@ -29,6 +29,38 @@ const userSchema = new mongoose.Schema({
   bio: {
     type: String,
     default: '',
+    maxlength: 500,
+  },
+  // Short line under the name, e.g. "Full-stack student developer"
+  headline: {
+    type: String,
+    default: '',
+    maxlength: 80,
+  },
+  location: {
+    type: String,
+    default: '',
+    maxlength: 60,
+  },
+  github: {
+    type: String,
+    default: '',
+    match: [/^$|^https?:\/\//, 'GitHub link must start with http:// or https://'],
+  },
+  linkedin: {
+    type: String,
+    default: '',
+    match: [/^$|^https?:\/\//, 'LinkedIn link must start with http:// or https://'],
+  },
+  website: {
+    type: String,
+    default: '',
+    match: [/^$|^https?:\/\//, 'Website link must start with http:// or https://'],
+  },
+  // Shown on profiles and in search so people know who wants collaboration requests
+  openToCollab: {
+    type: Boolean,
+    default: true,
   },
   role: {
     type: String,
